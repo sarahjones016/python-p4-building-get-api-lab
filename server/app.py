@@ -21,13 +21,11 @@ def index():
 @app.route('/bakeries')
 def bakeries():
 
-    for bakery in Bakery.query.all():
-        bakery_dict = bakery.to_dict()
-        bakery_list = []
-        bakery_list.append(bakery_dict)
+    all_bakeries = Bakery.query.all()
+    all_bakeries_serialized = [bakery.to_dict() for bakery in all_bakeries]
 
     response = make_response(
-        jsonify(bakery_list),
+        jsonify(all_bakeries_serialized),
         200
     )
     response.headers['Content-Type'] = 'application/json'
@@ -35,12 +33,12 @@ def bakeries():
 
 @app.route('/bakeries/<int:id>')
 def bakery_by_id(id):
-    bakery = Bakery.query.filter(Bakery.id == id).first()
+    bakery_by_id = Bakery.query.filter(Bakery.id == id).first()
 
-    bakery_dict = bakery.to_dict()
+    bakery_by_id_serialized = bakery_by_id.to_dict()
 
     response = make_response(
-        jsonify(bakery_dict),
+        jsonify(bakery_by_id_serialized),
         200
     )
     response.headers['Content-Type'] = 'application/json'
@@ -48,13 +46,11 @@ def bakery_by_id(id):
 
 @app.route('/baked_goods/by_price')
 def baked_goods_by_price():
-    for baked_good in BakedGood.query.order_by(BakedGood.price.desc()).all():
-        baked_good_dict = baked_good.to_dict()
-        baked_good_list = []
-        baked_good_list.append(baked_good_dict)
+    baked_goods_by_price = BakedGood.query.order_by(BakedGood.price).all()
+    baked_goods_by_price_serialized = [baked_good.to_dict() for baked_good in baked_goods_by_price]
 
     response = make_response(
-        jsonify(baked_good_list),
+        jsonify(baked_goods_by_price_serialized),
         200
     )
     response.headers['Content-Type'] = 'application/json'
@@ -62,12 +58,12 @@ def baked_goods_by_price():
 
 @app.route('/baked_goods/most_expensive')
 def most_expensive_baked_good():
-    expensive_baked_good = BakedGood.query.order_by(BakedGood.price.desc()).first()
+    most_expensive_baked_good = BakedGood.query.order_by(BakedGood.price.desc()).first()
 
-    expensive_baked_good = expensive_baked_good.to_dict()
+    most_expensive_baked_good_serialized = most_expensive_baked_good.to_dict()
 
     response = make_response(
-        jsonify(expensive_baked_good),
+        jsonify(most_expensive_baked_good_serialized),
         200
     )
     response.headers['Content-Type'] = 'application/json'
